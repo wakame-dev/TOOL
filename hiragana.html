@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ひらがなを絵文字に変換</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 600px;
+        }
+
+        h1 {
+            font-size: 24px;
+            text-align: center;
+        }
+
+        textarea {
+            width: 100%;
+            height: 100px;
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+            margin-top: 10px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .output-container {
+            margin-top: 20px;
+            font-size: 18px;
+            text-align: left;
+        }
+
+        #outputText {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            background-color: #f9f9f9;
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+
+        .button-container button {
+            width: 48%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>ひらがなを絵文字に変換するツール</h1>
+        <textarea id="inputText" rows="4" cols="50" placeholder="ひらがなを入力してください"></textarea>
+        <br><br>
+        <button onclick="convertText()">変換</button>
+        <br><br>
+
+        <div class="output-container">
+            <h3>変換結果:</h3>
+            <p id="outputText"></p>
+
+            <!-- ボタンエリア -->
+            <div class="button-container">
+                <button id="copyButton" onclick="copyText()">コピー</button>
+                <button id="shareButton" onclick="shareText()">共有</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const emojiDict = {
+            "あ": "<:A_:1340976828726116393>",
+            "い": "<:I_:1340976843037347891>",
+            "う": "<:U_:1340976875736010762>",
+            "え": "<:E_:1340976891850522675>",
+            "お": "<:O_:1340976944703078460>",
+            "か": "<:Ka:1340976966962253947>",
+            "き": "<:Ki:1340976993935687690>",
+            "く": "<:Ku:1340977016215703564>",
+            "け": "<:Ke:1340977032632336465>",
+            "こ": "<:Ko:1340977045542408232>",
+            "さ": "<:Sa:1340977059110981725>",
+            "し": "<:Shi:1340977073950425158>",
+            "す": "<:Su:1340977088701927444>",
+            "せ": "<:Se:1340977106422861865>",
+            "そ": "<:So:1340977121371230231>",
+            "た": "<:Ta:1340979818686320712>",
+            "ち": "<:Chi:1340979872222154836>",
+            "つ": "<:Tsu:1340979889867587595>",
+            "て": "<:Te:1340979908867919922>",
+            "と": "<:To:1340979928664903691>",
+            "な": "<:Na:1340980725796835442>",
+            "に": "<:Ni:1340980751142879313>",
+            "ぬ": "<:Nu:1340980777642496101>",
+            "ね": "<:Ne:1340980795808153671>",
+            "の": "<:No:1340980810605527101>",
+            "は": "<:Ha:1340980844285923359>",
+            "ひ": "<:Hi:1340980859859370045>",
+            "ふ": "<:Hu:1340980872555528256>",
+            "へ": "<:He:1340980904402751538>",
+            "ほ": "<:Ho:1340980919905026108>",
+            "ま": "<:Ma:1340980953522245662>",
+            "み": "<:Mi:1340980971478061169>",
+            "む": "<:Mu:1340980986900385835>",
+            "め": "<:Me:1340981005577617478>",
+            "も": "<:Mo:1340981020966781033>",
+            "や": "<:Ya:1340983994560413769>",
+            "ゆ": "<:Yu:1340984018715283497>",
+            "よ": "<:Yo:1340984034523746365>",
+            "ら": "<:Ra:1341064247127445607>",
+            "り": "<:Ri:1341064266765045790>",
+            "る": "<:Ru:1341064285446606878>",
+            "れ": "<:Re:1341064309631094805>",
+            "ろ": "<:Ro:1341064336529162270>",
+            "わ": "<:Wa:1340984289562595380>",
+            "を": "<:Wo:1340984337004363776>",
+            "ん": "<:N_:1340984377370480671>"
+            // 他の文字も同様に追加
+        };
+
+        function convertText() {
+            const inputText = document.getElementById('inputText').value;
+            let outputText = '';
+            
+            for (let i = 0; i < inputText.length; i++) {
+                const char = inputText[i];
+                outputText += emojiDict[char] || char;
+            }
+
+            document.getElementById('outputText').innerHTML = outputText;
+        }
+
+        // コピーボタンの機能
+        function copyText() {
+            const outputText = document.getElementById('outputText').innerText;
+            const textArea = document.createElement('textarea');
+            textArea.value = outputText;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+            alert("コピーしました!");
+        }
+
+        // 共有ボタンの機能
+        function shareText() {
+            const outputText = document.getElementById('outputText').innerText;
+            if (navigator.share) {
+                navigator.share({
+                    title: 'ひらがなを絵文字に変換',
+                    text: outputText,
+                    url: window.location.href
+                }).catch((error) => console.error('エラーが発生しました:', error));
+            } else {
+                alert("共有機能がサポートされていません。");
+            }
+        }
+    </script>
+</body>
+</html>
